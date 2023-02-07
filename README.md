@@ -3,8 +3,7 @@
 Aromatic compounds in wildfire smoke significantly impact the taste, odor, and value of wine. The aim of this project is finding the correlation between those volatile organic compounds (VOCs) and human-evaluated smoke taint indices. 
 
 ![Figure 1. Overview: The aim of the project is predicting smoke taint index given concentrations of volatile organic compounds (VOCs) measured in grapes and wines. Different models including linear (Lasso), support vector regression (SVR), and random forest are applied.](https://github.com/IBPA/smoke_taint_prediction/blob/main/figure/figure1.svg)
-{:.image-caption}
-*Overview: The aim of the project is predicting smoke taint index given concentrations of volatile organic compounds (VOCs) measured in grapes and wines. Different models including linear (Lasso), support vector regression (SVR), and random forest are applied.*
+*Figure 1. Overview: The aim of the project is predicting smoke taint index given concentrations of volatile organic compounds (VOCs) measured in grapes and wines. Different models including linear (Lasso), support vector regression (SVR), and random forest are applied.*
 ## Source code
 The source code contains four parts. Although the number implies the order of the entire analysis procedure, each part can be executed independently.
  1. Outlier detection:
@@ -15,6 +14,7 @@ The source code contains four parts. Although the number implies the order of th
  This part processes the replicates by taking the median (for triplicate measurements) or average (for duplicate measurements) and then does the general analysis including the following items:
      - Plotting the heatmap of the VOC intensities of wine samples in the dataset.
      ![Figure 2. The heatmap of VOC intensities of wine samples in the entire dataset. Each row represents different VOCs detected in grapes and wines, and each column represents different wine samples.](https://github.com/IBPA/smoke_taint_prediction/blob/main/figure/figure2.svg)
+     *Figure 2. The heatmap of VOC intensities of wine samples in the entire dataset. Each row represents different VOCs detected in grapes and wines, and each column represents different wine samples.*
      - PCA analysis
      - t-SNE analysis
      - Univariate analysis
@@ -22,11 +22,13 @@ The source code contains four parts. Although the number implies the order of th
  This part predict the Smoke taint index using three different model:
      - Linear (Lasso)
      ![Figure 3. Performance evaluation plot of the linear model generated from this part of the code.](https://github.com/IBPA/smoke_taint_prediction/blob/main/figure/figure3.svg)
+     *Figure 3. Performance evaluation plot of the linear model generated from this part of the code.*
      - Support Vector Regression (SVR)
      - Random Forest
  4. Correlation between grape VOC concentrations and wine VOC concentrations
  The correlation between grape VOC concentrations and wine VOC concentrations are observed.
  ![Figure 4. Correlations between grape VOC concentration and wine VOC concentrations. Concentration of free phenol in grape (the fourth column) is negative correlated with the concentration of wine VOCs.](https://github.com/IBPA/smoke_taint_prediction/blob/main/figure/figure4.svg)
+ *Figure 4. Correlations between grape VOC concentration and wine VOC concentrations. Concentration of free phenol in grape (the fourth column) is negative correlated with the concentration of wine VOCs.*
 
 ## Run the source code
 
