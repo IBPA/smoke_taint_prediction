@@ -2,8 +2,9 @@
 ## Overview
 Aromatic compounds in wildfire smoke significantly impact the taste, odor, and value of wine. The aim of this project is finding the correlation between those volatile organic compounds (VOCs) and human-evaluated smoke taint indices. 
 
-![Figure 1. Overview: The aim of the project is predicting smoke taint index given concentrations of volatile organic compounds (VOCs) measured in grapes and wines. Different models including linear (Lasso), support vector regression (SVR), and random forest are applied.](https://github.com/IBPA/smoke_taint_prediction/blob/main/figure/figure3.svg)
-
+![Figure 1. Overview: The aim of the project is predicting smoke taint index given concentrations of volatile organic compounds (VOCs) measured in grapes and wines. Different models including linear (Lasso), support vector regression (SVR), and random forest are applied.](https://github.com/IBPA/smoke_taint_prediction/blob/main/figure/figure1.svg)
+{:.image-caption}
+*Overview: The aim of the project is predicting smoke taint index given concentrations of volatile organic compounds (VOCs) measured in grapes and wines. Different models including linear (Lasso), support vector regression (SVR), and random forest are applied.*
 ## Source code
 The source code contains four parts. Although the number implies the order of the entire analysis procedure, each part can be executed independently.
  1. Outlier detection:
