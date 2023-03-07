@@ -66,10 +66,11 @@ In addition, it is necessary to specify the working directory correctly. Please 
 
 ### Run the code
 You can run the code in RStudio IDE or run the code in the console, for example:
-` Rscript 0_outlier_detection.r`
-` Rscript 1_general_analysis.r`
-` Rscript 2_smoke_taint_prediction.r`
-` Rscript 3_cor_grape_voc_vs_wine_voc.r`
+
+    Rscript 0_outlier_detection.r
+    Rscript 1_general_analysis.r
+    Rscript 2_smoke_taint_prediction.r
+    Rscript 3_cor_grape_voc_vs_wine_voc.r
 
 ## Outputs
 The outputs generated from four parts of the code will be stored in their output directories respectively (please refer the example output directory).
