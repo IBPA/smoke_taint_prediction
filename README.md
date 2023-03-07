@@ -64,6 +64,13 @@ Commands for installing all required R packages:
 ### Required code modification before running
 In addition, it is necessary to specify the working directory correctly. Please go to Line 3-5 in code files and set the main directory which contains code and data directory as the working directory (NOT the directory the contains the code).
 
+### Run the code
+You can run the code in RStudio IDE or run the code in the console, for example:
+` Rscript 0_outlier_detection.r`
+` Rscript 1_general_analysis.r`
+` Rscript 2_smoke_taint_prediction.r`
+` Rscript 3_cor_grape_voc_vs_wine_voc.r`
+
 ## Outputs
 The outputs generated from four parts of the code will be stored in their output directories respectively (please refer the example output directory).
 
