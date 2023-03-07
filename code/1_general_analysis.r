@@ -1,7 +1,7 @@
 #Smoke Taint Index Prediction Project
 
 #Please set your working directory here.
-WORKING_DIR = "C:\\Users\\Bigghost\\Documents\\GitHub\\smoke_taint_prediction"
+WORKING_DIR = "C:/Users/Bigghost/Documents/GitHub/smoke_taint_prediction/"
 setwd(WORKING_DIR)
 
 #Create the output directory for storing the output figures
@@ -104,10 +104,10 @@ plot_pca_results = function(filename_pc1_pc2_smoke_taint,
     #SVM boundary (for PC1 VS PC2 plot)
     prepare_svm_grid_df = function(pc1, pc2){
         df = data.frame(pc1 = pc1, pc2 = pc2)
-        high_low_index = rep("Low",nrow(df))
-        high_low_index[integrated_grape_wine_data[,"Sensory_ash (smoke taint out of 100)"] > 30] = "High"
+        high_low_index = rep(F,nrow(df))
+        high_low_index[integrated_grape_wine_data[,"Sensory_ash (smoke taint out of 100)"] > 30] = T
         df = cbind(df, high_low_index)
-        svm_res = svm(high_low_index~pc1+pc2, data = df)
+        svm_res = svm(high_low_index~pc1+pc2, data = df, type="C")
         
         grid_x = seq(-4, 18, length.out = 50)
         grid_y = seq(-7, 7, length.out = 50)
@@ -118,8 +118,8 @@ plot_pca_results = function(filename_pc1_pc2_smoke_taint,
         df_grids = data.frame(pc1 = grids[,1], pc2 = grids[,2])
         predict_grids = predict(svm_res, df_grids)
         predict_grids = as.character(predict_grids)
-        predict_grids[predict_grids == "High"] = 1
-        predict_grids[predict_grids == "Low"] = 0
+        predict_grids[predict_grids == T] = 1
+        predict_grids[predict_grids == F] = 0
         predict_grids = as.numeric(predict_grids)
         
         df_val = data.frame(x = grids[,1], y = grids[,2], zi = as.factor(predict_grids), z = predict_grids)
