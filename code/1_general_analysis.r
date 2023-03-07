@@ -254,24 +254,25 @@ plot_pca_results = function(filename_pc1_pc2_smoke_taint,
 }
 
 
+find_region = function(x){
+    x = strsplit(x,"|",fixed=T)[[1]][1]
+    idx = which(x == data[,colidx_sample_name])
+    if (length(idx) == 0) stop()
+    return(data$`Region (AVA)`[idx[1]])
+}
+
+find_county = function(x){
+    x = strsplit(x,"|",fixed=T)[[1]][1]
+    idx = which(x == data[,colidx_sample_name])
+    if (length(idx) == 0) stop()
+    return(data$County[idx[1]])
+}
+
+
 plot_tsne = function(data, integrated_grape_wine_data,
                      approaches = c("none", "min_max","z","quantile"),
                      n_neighbors = c(2,5,10,20)){
-    #TSNE
-    find_region = function(x){
-        x = strsplit(x,"|",fixed=T)[[1]][1]
-        idx = which(x == data[,colidx_sample_name])
-        if (length(idx) == 0) stop()
-        return(data$`Region (AVA)`[idx[1]])
-    }
-    
-    find_county = function(x){
-        x = strsplit(x,"|",fixed=T)[[1]][1]
-        idx = which(x == data[,colidx_sample_name])
-        if (length(idx) == 0) stop()
-        return(data$County[idx[1]])
-    }
-    
+
     score_tag = sapply(integrated_grape_wine_data[,"Sensory_ash (smoke taint out of 100)"], function(x){
         if (x <= 10) return("<= 10")
         if (x <= 20) return("10 < x <= 20")
@@ -521,7 +522,7 @@ analysis_hypothesis2 = function(integrated_grape_wine_data){
     print("Hypothesis 2 -- Are wines from Napa with higher smoke taint index?")
     print(paste0("Avg Smoke Taint Index (Napa) = ", format(mean(smoke_taint_index[county_info=="Napa"]), digits=4)))
     print(paste0("Avg Smoke Taint Index (Others) = ", format(mean(smoke_taint_index[county_info!="Napa"]), digits=4)))
-    print(paste0("p = ",format(p_val,digits=2),""))
+    print(paste0("p = ",format(pval,digits=2),""))
 }
 
 
@@ -698,211 +699,4 @@ plot_cor_log("output/1_general_analysis/cor_total_4-methylsyringol_grape_log.svg
          y = integrated_grape_wine_data[,ncol(integrated_grape_wine_data)]
 )
 
-
-
-#Linear regression
-
-features = integrated_grape_wine_data[,1:(ncol(integrated_grape_wine_data)-1)]
-scores = integrated_grape_wine_data[,ncol(integrated_grape_wine_data)]
-linear_model = lm(scores~features)
-
-lm_predict = predict(linear_model)
-cor(lm_predict,scores)
-
-#Lasso regression
-lambdas = 10^seq(3,-3,-0.0001)
-
-source("code/functions_smoke_taint_prediction.r")
-N_Trial = 10
-lasso_result_list = list()
-lasso_result_grape_list = list()
-svr_result_list = list()
-svr_result_grape_list = list()
-rf_result_list = list()
-rf_result_grape_list = list()
-
-log_lasso_result_list = list()
-log_lasso_result_grape_list = list()
-log_svr_result_list = list()
-log_svr_result_grape_list = list()
-log_rf_result_list = list()
-log_rf_result_grape_list = list()
-
-for (i in 1 : N_Trial){
-    print(i)
-    lasso_result_list[[i]] = run_lasso(matrix(scores,ncol=1),features) 
-    lasso_result_grape_list[[i]] = run_lasso(matrix(scores,ncol=1),features[,1:20]) 
-    svr_result_list[[i]] = run_svr(matrix(scores,ncol=1),features)
-    svr_result_grape_list[[i]] = run_svr(matrix(scores,ncol=1),features[,1:20])
-    rf_result_list[[i]] = run_rf(matrix(scores,ncol=1),features)
-    rf_result_grape_list[[i]] = run_rf(matrix(scores,ncol=1),features[,1:20])
-    
-    log_lasso_result_list[[i]] = run_lasso(matrix(scores,ncol=1),log(features+1)) 
-    log_lasso_result_grape_list[[i]] = run_lasso(matrix(scores,ncol=1),log(1+features[,1:20])) 
-    log_svr_result_list[[i]] = run_svr(matrix(scores,ncol=1),log(1+features))
-    log_svr_result_grape_list[[i]] = run_svr(matrix(scores,ncol=1),log(1+features[,1:20]))
-    log_rf_result_list[[i]] = run_rf(matrix(scores,ncol=1),log(1+features))
-    log_rf_result_grape_list[[i]] = run_rf(matrix(scores,ncol=1),log(1+features[,1:20]))
-}
-
-pcc_lasso = sapply(lasso_result_list,function(x){x$lasso_performance[1]})
-pcc_lasso_grape = sapply(lasso_result_grape_list,function(x){x$lasso_performance[1]})
-pcc_svr = sapply(svr_result_list,function(x){x$svr_performance[1]})
-pcc_svr_grape = sapply(svr_result_grape_list,function(x){x$svr_performance[1]})
-pcc_rf = sapply(rf_result_list,function(x){x$rf_performance[1]})
-pcc_rf_grape = sapply(rf_result_grape_list,function(x){x$rf_performance[1]})
-
-pcc_log_lasso = sapply(log_lasso_result_list,function(x){x$lasso_performance[1]})
-pcc_log_lasso_grape = sapply(log_lasso_result_grape_list,function(x){x$lasso_performance[1]})
-pcc_log_svr = sapply(log_svr_result_list,function(x){x$svr_performance[1]})
-pcc_log_svr_grape = sapply(log_svr_result_grape_list,function(x){x$svr_performance[1]})
-pcc_log_rf = sapply(log_rf_result_list,function(x){x$rf_performance[1]})
-pcc_log_rf_grape = sapply(log_rf_result_grape_list,function(x){x$rf_performance[1]})
-
-get_spearman = function(input){
-    raw_cor_val = sapply(input,function(x){cor(x$pred_Y,x$truth_Y,method="spearman")})
-    return(raw_cor_val)
-}
-
-
-results_pcc = list(pcc_lasso = pcc_lasso,
-                   pcc_lasso_grape = pcc_lasso_grape,
-                   pcc_svr = pcc_svr,
-                   pcc_svr_grape = pcc_svr_grape,
-                   pcc_rf = pcc_rf,
-                   pcc_rf_grape = pcc_rf_grape,
-                   pcc_log_lasso = pcc_log_lasso,
-                   pcc_log_lasso_grape = pcc_log_lasso_grape,
-                   pcc_log_svr = pcc_log_svr,
-                   pcc_log_svr_grape = pcc_log_svr_grape,
-                   pcc_log_rf = pcc_log_rf,
-                   pcc_log_rf_grape = pcc_log_rf_grape)
-
-heatmap_matrix = matrix(0,nrow=2,ncol=6)
-heatmap_matrix[1,1] = mean(results_pcc$pcc_lasso)
-heatmap_matrix[1,2] = mean(results_pcc$pcc_svr)
-heatmap_matrix[1,3] = mean(results_pcc$pcc_rf)
-
-heatmap_matrix[1,4] = mean(results_pcc$pcc_log_lasso)
-heatmap_matrix[1,5] = mean(results_pcc$pcc_log_svr)
-heatmap_matrix[1,6] = mean(results_pcc$pcc_log_rf)
-
-heatmap_matrix[2,1] = mean(results_pcc$pcc_lasso_grape)
-heatmap_matrix[2,2] = mean(results_pcc$pcc_svr_grape)
-heatmap_matrix[2,3] = mean(results_pcc$pcc_rf_grape)
-
-heatmap_matrix[2,4] = mean(results_pcc$pcc_log_lasso_grape)
-heatmap_matrix[2,5] = mean(results_pcc$pcc_log_svr_grape)
-heatmap_matrix[2,6] = mean(results_pcc$pcc_log_rf_grape)
-
-method_name = c("Lasso","SVR","RF","Lasso","SVR","RF")
-feature_selection_method = c("(Use All Features)","(Grape Features Only)")
-svg("output/1_general_analysis/model_performance.svg",width=8,height=1.5)
-h = Heatmap(heatmap_matrix,
-        #column_title = "Model Performance (PCC) (5-Fold CV, 10 times)",
-        col = colorRamp2(c(0, 0.5, 1), c("blue", "white", "red")),
-        column_split = c(rep("(Conc)",3),rep("(Log(Conc+1))",3)),
-        row_split = c(1,2),
-        show_row_dend = F,
-        show_column_dend = F,
-        cluster_rows = F,
-        cluster_columns = F,
-        show_column_names = F,
-        show_row_names = F,
-        column_title_gp = gpar(fontsize=12),
-        column_names_gp = gpar(fontsize=10),
-        cell_fun = function(j, i, x, y, w, h, col) { # add text to each grid
-            grid.text(formatC(heatmap_matrix[i,j], digits=2, format="f"), x, y)
-        }, 
-        top_annotation = HeatmapAnnotation(
-            text = anno_text(method_name, rot = 0, just = "center"),
-            annotation_height = max_text_height(method_name)
-        ), 
-        left_annotation = rowAnnotation(
-            text = anno_text(feature_selection_method, rot = 0, just = "left"),
-            annotation_width = max_text_width(feature_selection_method)
-        ),
-        row_title = NULL,
-        column_title_side = "bottom",
-        show_heatmap_legend = FALSE)
-draw(h)
-dev.off()
-
-
-spearman_lasso = get_spearman(lasso_result_list)
-spearman_lasso_grape = get_spearman(lasso_result_grape_list)
-spearman_svr = get_spearman(svr_result_list)
-spearman_svr_grape = get_spearman(svr_result_grape_list)
-spearman_rf = get_spearman(rf_result_list)
-spearman_rf_grape = get_spearman(rf_result_grape_list)
-
-spearman_log_lasso = get_spearman(log_lasso_result_list)
-spearman_log_lasso_grape = get_spearman(log_lasso_result_grape_list)
-spearman_log_svr = get_spearman(log_svr_result_list)
-spearman_log_svr_grape = get_spearman(log_svr_result_grape_list)
-spearman_log_rf = get_spearman(log_rf_result_list)
-spearman_log_rf_grape = get_spearman(log_rf_result_grape_list)
-
-results_spearman = list(spearman_lasso = spearman_lasso,
-                   spearman_lasso_grape = spearman_lasso_grape,
-                   spearman_svr = spearman_svr,
-                   spearman_svr_grape = spearman_svr_grape,
-                   spearman_rf = spearman_rf,
-                   spearman_rf_grape = spearman_rf_grape,
-                   spearman_log_lasso = spearman_log_lasso,
-                   spearman_log_lasso_grape = spearman_log_lasso_grape,
-                   spearman_log_svr = spearman_log_svr,
-                   spearman_log_svr_grape = spearman_log_svr_grape,
-                   spearman_log_rf = spearman_log_rf,
-                   spearman_log_rf_grape = spearman_log_rf_grape)
-
-heatmap_matrix = matrix(0,nrow=2,ncol=6)
-heatmap_matrix[1,1] = mean(results_spearman$spearman_lasso)
-heatmap_matrix[1,2] = mean(results_spearman$spearman_svr)
-heatmap_matrix[1,3] = mean(results_spearman$spearman_rf)
-
-heatmap_matrix[1,4] = mean(results_spearman$spearman_log_lasso)
-heatmap_matrix[1,5] = mean(results_spearman$spearman_log_svr)
-heatmap_matrix[1,6] = mean(results_spearman$spearman_log_rf)
-
-heatmap_matrix[2,1] = mean(results_spearman$spearman_lasso_grape)
-heatmap_matrix[2,2] = mean(results_spearman$spearman_svr_grape)
-heatmap_matrix[2,3] = mean(results_spearman$spearman_rf_grape)
-
-heatmap_matrix[2,4] = mean(results_spearman$spearman_log_lasso_grape)
-heatmap_matrix[2,5] = mean(results_spearman$spearman_log_svr_grape)
-heatmap_matrix[2,6] = mean(results_spearman$spearman_log_rf_grape)
-
-method_name = c("Lasso","SVR","RF","Lasso","SVR","RF")
-feature_selection_method = c("(Use All Features)","(Grape Features Only)")
-svg("output/1_general_analysis/model_performance_spearman.svg",width=8,height=1.5)
-h = Heatmap(heatmap_matrix,
-            #column_title = "Model Performance (Spearman) (5-Fold CV, 10 times)",
-            col = colorRamp2(c(0, 0.5, 1), c("blue", "white", "red")),
-            column_split = c(rep("(Conc)",3),rep("(Log(Conc+1))",3)),
-            row_split = c(1,2),
-            show_row_dend = F,
-            show_column_dend = F,
-            cluster_rows = F,
-            cluster_columns = F,
-            show_column_names = F,
-            show_row_names = F,
-            column_title_gp = gpar(fontsize=12),
-            column_names_gp = gpar(fontsize=10),
-            cell_fun = function(j, i, x, y, w, h, col) { # add text to each grid
-                grid.text(formatC(heatmap_matrix[i,j], digits=2, format="f"), x, y)
-            }, 
-            top_annotation = HeatmapAnnotation(
-                text = anno_text(method_name, rot = 0, just = "center"),
-                annotation_height = max_text_height(method_name)
-            ), 
-            left_annotation = rowAnnotation(
-                text = anno_text(feature_selection_method, rot = 0, just = "left"),
-                annotation_width = max_text_width(feature_selection_method)
-            ),
-            row_title = NULL,
-            column_title_side = "bottom",
-            show_heatmap_legend = FALSE)
-draw(h)
-dev.off()
 
