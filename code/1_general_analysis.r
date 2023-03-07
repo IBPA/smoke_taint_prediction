@@ -14,6 +14,7 @@ rm(list=ls())
 #Library for data analysis
 library(preprocessCore)     #(Quantile Normalization for tsne)
 library(tsne)
+library(e1071)
 
 
 #Library for plotting

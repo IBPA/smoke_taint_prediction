@@ -1,4 +1,6 @@
 #Smoke Taint Index Prediction Project
+#Clean the working space and import necessary libraries
+rm(list=ls())
 
 #Please set your working directory here.
 WORKING_DIR = "C:\\Users\\Bigghost\\Documents\\GitHub\\smoke_taint_prediction"
@@ -10,9 +12,6 @@ N_Trial = 2
 #Create the output directory for storing the output figures
 dir.create("output")
 dir.create("output/2_smoke_taint_prediction")
-
-#Clean the working space and import necessary libraries
-rm(list=ls())
 
 #Library for prediction model
 library(glmnet)             #(Lasso)
