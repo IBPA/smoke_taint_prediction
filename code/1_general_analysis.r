@@ -711,7 +711,7 @@ cor(lm_predict,scores)
 #Lasso regression
 lambdas = 10^seq(3,-3,-0.0001)
 
-source("FunctionSet.r")
+source("code/functions_smoke_taint_prediction.r")
 N_Trial = 10
 lasso_result_list = list()
 lasso_result_grape_list = list()
