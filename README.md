@@ -76,8 +76,8 @@ You can run the code in RStudio IDE or run the code in the console, for example:
 The outputs generated from four parts of the code will be stored in their output directories respectively (please refer the example output directory).
 
 
-## Contact
-Please contact us at [tagkopouloslab@ucdavis.edu](mailto:tagkopouloslab@ucdavis.edu) if you have any issues of running the code .
+## Request the dataset and contact information
+Please contact us at [tagkopouloslab@ucdavis.edu](mailto:tagkopouloslab@ucdavis.edu) if you need the dataset for analysis or have any issues of running the code .
 
 ## Acknowledgements
 
