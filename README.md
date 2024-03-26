@@ -77,7 +77,7 @@ The outputs generated from four parts of the code will be stored in their output
 
 
 ## Request the dataset and contact information
-Please contact us at [tagkopouloslab@ucdavis.edu](mailto:tagkopouloslab@ucdavis.edu) if you need the dataset for analysis or have any issues of running the code .
+Please contact us at [tagkopouloslab@ucdavis.edu](mailto:tagkopouloslab@ucdavis.edu) if you need the dataset for analysis or have any issues of running the code.
 
 ## Acknowledgements
 
