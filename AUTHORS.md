@@ -1,4 +1,4 @@
-##Authors and their Contributions
+## Authors and their Contributions
 -   Cheng-En Tan: Data analysis, code development, and manuscript preparation.
 -   Bishnu Prasad Neupane: Wine and grape sample collection, and quantification of volatile organic compounds.
 -   Yan Wen: Wine and grape sample collection, and quantification of volatile organic compounds.
