@@ -75,9 +75,20 @@ You can run the code in RStudio IDE or run the code in the console, for example:
 ## Outputs
 The outputs generated from four parts of the code will be stored in their output directories respectively (please refer the example output directory).
 
-
 ## Request the dataset and contact information
 Please contact us at [tagkopouloslab@ucdavis.edu](mailto:tagkopouloslab@ucdavis.edu) if you need the dataset for analysis or have any issues of running the code.
+
+## License
+This project is licensed under the Apache-2.0 License. Please see the [LICENSE](https://github.com/IBPA/smoke_taint_prediction/blob/main/LICENSE) file for details.
+
+## Authors
+Please see the [AUTHORS](https://github.com/IBPA/smoke_taint_prediction/blob/main/AUTHORS) file for details.
+
+## Citation
+Please cite the following journal article if you use this repository:
+
+-   Tan, C. E., Neupane, B. P., Wen, Y., Lim, L. X., Medina Plaza, C., Oberholster, A., & Tagkopoulos, I. (2024). Volatile organic compound-based predictive modeling of smoke taint in wine. Journal of Agricultural and Food Chemistry, 72(14), 8060-8071. (https://doi.org/10.1021/acs.jafc.3c07019)
+
 
 ## Acknowledgements
 
