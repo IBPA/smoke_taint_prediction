@@ -82,7 +82,7 @@ Please contact us at [tagkopouloslab@ucdavis.edu](mailto:tagkopouloslab@ucdavis.
 This project is licensed under the Apache-2.0 License. Please see the [LICENSE](https://github.com/IBPA/smoke_taint_prediction/blob/main/LICENSE) file for details.
 
 ## Authors
-Please see the [AUTHORS](https://github.com/IBPA/smoke_taint_prediction/blob/main/AUTHORS) file for details.
+Please see the [AUTHORS](https://github.com/IBPA/smoke_taint_prediction/blob/main/AUTHORS.md) file for details.
 
 ## Citation
 Please cite the following journal article if you use this repository:
